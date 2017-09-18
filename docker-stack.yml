@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+
+  # only single instance supported
+  mariadb:
+    image: test/mariadb2
+    hostname: "{{.Service.Name}}.{{.Task.Slot}}"
+    environment:
+      MYSQL_ROOT_PASSWORD: passw0rd
+      MYSQL_DATABASE: TEST
+      MYSQL_USER: test_write
+      MYSQL_PASSWORD: test_write
+    volumes:
+      - /tmp/database:/var/lib/mysql
+    networks:
+      default:
+        aliases:
+          - database.test.com
+    deploy:
+      placement:
+        constraints:
+          - node.ip == 10.6.65.158
